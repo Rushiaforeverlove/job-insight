@@ -7,69 +7,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body id="pageBody" class="bg-light">
 
-    <div class="container mt-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 
-        <h1 class="text-center mb-4">
-            🔍 Job Insight 職缺分析平台
-        </h1>
+        <div class="container">
 
-        <!-- 搜尋 -->
-        <form method="GET" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="keyword" class="form-control" placeholder="搜尋職缺 / 公司">
-                <button class="btn btn-primary">搜尋</button>
-            </div>
-        </form>
+            <a class="navbar-brand fw-bold" href="/">
+                🔍 Job Insight
+            </a>
 
-        <!-- 卡片區 -->
-        <div class="row">
+            <button id="themeButton" class="btn btn-light" onclick="toggleDarkMode()">
 
-            {% for job in jobs %}
+                🌙 Dark Mode
 
-            <div class="col-md-6 col-lg-4">
+            </button>
 
-                <div class="card mb-4 shadow-sm border-0">
+        </div>
 
-                    <div class="card-body">
+    </nav>
 
-                        <h5 class="card-title fw-bold">
-                            <a href="/job/{{ job.id }}/">
-                                {{ job.title }}
-                            </a>
-                        </h5>
+    <!-- 搜尋 -->
+    <form method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="搜尋職缺 / 公司">
+            <button class="btn btn-primary">搜尋</button>
+        </div>
+    </form>
 
-                        <p class="text-muted mb-1">
-                            🏢 {{ job.company }}
-                        </p>
+    <!-- 卡片區 -->
+    <div class="row">
 
-                        <p class="mb-1">
-                            💰 {{ job.salary }}
-                        </p>
+        {% for job in jobs %}
 
-                        <p class="mb-2">
-                            📍 {{ job.location }}
-                        </p>
+        <div class="col-md-6 col-lg-4">
 
-                        <!-- skill badge -->
-                        <span class="badge bg-secondary">
-                            {{ job.skill }}
-                        </span>
+            <div class="card mb-4 shadow-sm border-0 job-card">
 
-                    </div>
+                <div class="card-body">
+
+                    <h5 class="card-title fw-bold">
+                        <a href="/job/{{ job.id }}/">
+                            {{ job.title }}
+                        </a>
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        🏢 {{ job.company }}
+                    </p>
+
+                    <p class="mb-1">
+                        💰 {{ job.salary }}
+                    </p>
+
+                    <p class="mb-2">
+                        📍 {{ job.location }}
+                    </p>
+
+                    <!-- skill badge -->
+                    <span class="badge bg-secondary">
+                        {{ job.skill }}
+                    </span>
 
                 </div>
 
             </div>
 
-            {% empty %}
-
-            <p class="text-center">沒有資料</p>
-
-            {% endfor %}
-
         </div>
+
+        {% empty %}
+
+        <p class="text-center">沒有資料</p>
+
+        {% endfor %}
+
+    </div>
 
     </div>
 
@@ -97,6 +109,83 @@
         </ul>
     </nav>
 
+    <script>
+
+        function enableDarkMode() {
+
+            const body = document.getElementById("pageBody")
+
+            body.classList.remove("bg-light")
+            body.classList.add("bg-dark")
+            body.classList.add("text-white")
+
+            const cards = document.querySelectorAll(".job-card")
+
+            cards.forEach(card => {
+
+                card.classList.add("bg-secondary")
+                card.classList.add("text-white")
+
+            })
+
+            const button = document.getElementById("themeButton")
+
+            button.innerHTML = "☀ Light Mode"
+
+            localStorage.setItem("theme", "dark")
+        }
+
+        function disableDarkMode() {
+
+            const body = document.getElementById("pageBody")
+
+            body.classList.remove("bg-dark")
+            body.classList.remove("text-white")
+            body.classList.add("bg-light")
+
+            const cards = document.querySelectorAll(".job-card")
+
+            cards.forEach(card => {
+
+                card.classList.remove("bg-secondary")
+                card.classList.remove("text-white")
+
+            })
+
+            const button = document.getElementById("themeButton")
+
+            button.innerHTML = "🌙 Dark Mode"
+
+            localStorage.setItem("theme", "light")
+        }
+
+        function toggleDarkMode() {
+
+            const body = document.getElementById("pageBody")
+
+            if (body.classList.contains("bg-dark")) {
+
+                disableDarkMode()
+
+            } else {
+
+                enableDarkMode()
+
+            }
+        }
+
+        window.onload = function () {
+
+            const theme = localStorage.getItem("theme")
+
+            if (theme === "dark") {
+
+                enableDarkMode()
+
+            }
+        }
+
+    </script>
 </body>
 
 </html>
