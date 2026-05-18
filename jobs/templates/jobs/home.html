@@ -44,13 +44,16 @@
 
             <div class="card mb-4 shadow-sm border-0 job-card">
 
-                <div class="card-body">
+                <div class="card-body position-relative">
 
                     <h5 class="card-title fw-bold">
                         <a href="/job/{{ job.id }}/">
                             {{ job.title }}
                         </a>
                     </h5>
+                    <button class="btn btn-sm btn-outline-danger" onclick="toggleFavorite('{{ job.id }}', this)">
+                        🤍
+                    </button>
 
                     <p class="text-muted mb-1">
                         🏢 {{ job.company }}
@@ -183,6 +186,41 @@
                 enableDarkMode()
 
             }
+        }
+
+        function toggleFavorite(jobId, btn) {
+
+            fetch(`/favorite/${jobId}/`)
+
+                .then(res => res.json())
+
+                .then(data => {
+
+                    if (data.status === "added") {
+                        btn.innerHTML = "❤️"
+                    } else {
+                        btn.innerHTML = "🤍"
+                    }
+
+                })
+        }
+
+        window.onload = function () {
+
+            const favorites = JSON.parse(localStorage.getItem("favorites")) || []
+
+            document.querySelectorAll("button").forEach(btn => {
+
+                const onclick = btn.getAttribute("onclick")
+
+                if (!onclick) return
+
+                const jobId = onclick.match(/'(.*?)'/)[1]
+
+                if (favorites.includes(jobId)) {
+                    btn.innerHTML = "❤️"
+                }
+            })
         }
 
     </script>

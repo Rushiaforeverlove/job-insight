@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的收藏</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/">
+                🔍 Job Insight
+            </a>
+
+            <a href="/" class="btn btn-light btn-sm">
+                回首頁
+            </a>
+
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+
+        <h2 class="text-center mb-4">❤️ 我的收藏職缺</h2>
+
+        {% if favs %}
+
+        <div class="row" id="favContainer">
+
+            {% for f in favs %}
+
+            <div class="col-md-6 col-lg-4" id="card-{{ f.job.id }}">
+
+                <div class="card mb-3 shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <!-- 職缺標題（可點進詳細頁） -->
+                        <h5 class="card-title fw-bold">
+                            <a href="/job/{{ f.job.id }}/" class="text-decoration-none text-dark">
+                                {{ f.job.title }}
+                            </a>
+                        </h5>
+
+                        <!-- 公司 -->
+                        <p class="text-muted mb-2">
+                            {{ f.job.company }}
+                        </p>
+
+                        <!-- 取消收藏 -->
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeFavorite('{{ f.job.id }}')">
+                            ❤️ 取消收藏
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center text-muted mt-5">
+
+            <h5>目前沒有收藏任何職缺</h5>
+
+            <a href="/" class="btn btn-primary mt-3">
+                去看看職缺
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+
+        function removeFavorite(jobId) {
+
+            fetch(`/favorite/${jobId}/`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.status === "removed") {
+
+                        // 🔥 直接移除卡片（不用刷新）
+                        const card = document.getElementById(`card-${jobId}`)
+
+                        if (card) {
+                            card.remove()
+                        }
+
+                        // 如果全部刪光，顯示提示
+                        const container = document.getElementById("favContainer")
+
+                        if (container && container.children.length === 0) {
+                            container.innerHTML = `
+                        <div class="text-center text-muted mt-5 w-100">
+                            <h5>目前沒有收藏任何職缺</h5>
+                            <a href="/" class="btn btn-primary mt-3">
+                                去看看職缺
+                            </a>
+                        </div>
+                    `
+                        }
+                    }
+                })
+        }
+
+    </script>
+
+</body>
+
+</html>
