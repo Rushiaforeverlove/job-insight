@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>登入</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5" style="max-width: 500px;">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h2 class="text-center mb-4">
+                    🔐 登入
+                </h2>
+
+                {% if error %}
+
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+
+                {% endif %}
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label>帳號</label>
+
+                        <input type="text" name="username" class="form-control">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>密碼</label>
+
+                        <input type="password" name="password" class="form-control">
+
+                    </div>
+
+                    <button class="btn btn-primary w-100">
+                        登入
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3">
+
+                    <a href="/register/">
+                        還沒有帳號？註冊
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
