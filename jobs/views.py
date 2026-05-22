@@ -13,8 +13,20 @@ def home(request):
 
     jobs = Job.objects.all().order_by('-id')
 
+    favorite_ids = []
+
+    if request.user.is_authenticated:
+
+        favorite_ids = Favorite.objects.filter(
+            user=request.user
+        ).values_list('job_id', flat=True)
+
     return render(request, 'jobs/home.html', {
-        'jobs': jobs
+
+        'jobs': jobs,
+
+        'favorite_ids': favorite_ids
+
     })
 
 

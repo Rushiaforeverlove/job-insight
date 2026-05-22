@@ -126,7 +126,15 @@
                         <button class="btn btn-sm btn-outline-danger position-absolute bottom-0 end-0 m-2"
                             onclick="toggleFavorite('{{ job.id }}', this)">
 
+                            {% if job.id in favorite_ids %}
+
+                            ❤️
+
+                            {% else %}
+
                             🤍
+
+                            {% endif %}
 
                         </button>
 
