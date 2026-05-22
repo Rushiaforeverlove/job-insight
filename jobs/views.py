@@ -5,6 +5,7 @@ from django.http import JsonResponse
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 # 首頁
@@ -28,6 +29,7 @@ def job_detail(request, job_id):
 
 
 # 收藏功能
+@login_required(login_url='/login/')
 def toggle_favorite(request, job_id):
 
     job = get_object_or_404(Job, id=job_id)
@@ -56,6 +58,7 @@ def toggle_favorite(request, job_id):
 
 
 # 收藏頁
+@login_required(login_url='/login/')
 def favorites(request):
 
     favorites = Favorite.objects.filter(
@@ -126,3 +129,4 @@ def logout_view(request):
     logout(request)
 
     return redirect('/')
+
