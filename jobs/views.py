@@ -1,31 +1,57 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Job, Favorite
-
 from django.http import JsonResponse
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 # 首頁
 def home(request):
 
+    query = request.GET.get('q')
+
     jobs = Job.objects.all().order_by('-id')
+
+    if query:
+
+        jobs = jobs.filter(
+
+            Q(title__icontains=query) |
+
+            Q(company__icontains=query) |
+
+            Q(skill__icontains=query) |
+
+            Q(location__icontains=query)
+
+        )
 
     favorite_ids = []
 
+    favorite_count = 0
+
     if request.user.is_authenticated:
 
-        favorite_ids = Favorite.objects.filter(
+        favorites = Favorite.objects.filter(
             user=request.user
-        ).values_list('job_id', flat=True)
+        )
+
+        favorite_ids = favorites.values_list(
+            'job_id',
+            flat=True
+        )
+
+        favorite_count = favorites.count()
 
     return render(request, 'jobs/home.html', {
 
         'jobs': jobs,
 
-        'favorite_ids': favorite_ids
+        'favorite_ids': favorite_ids,
+
+        'favorite_count': favorite_count
 
     })
 

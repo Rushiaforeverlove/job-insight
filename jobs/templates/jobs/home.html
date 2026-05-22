@@ -30,6 +30,16 @@
 
                     ❤️ 我的收藏
 
+                    {% if user.is_authenticated %}
+
+                    <span class="badge bg-danger">
+
+                        {{ favorite_count }}
+
+                    </span>
+
+                    {% endif %}
+
                 </a>
 
                 <!-- Dark Mode -->
@@ -78,6 +88,22 @@
 
         <h1 class="text-center mb-4 fw-bold">
             最新職缺
+            <form method="GET" class="mb-4">
+
+                <div class="input-group">
+
+                    <input type="text" name="q" class="form-control" placeholder="搜尋職缺、公司、技能..."
+                        value="{{ request.GET.q }}">
+
+                    <button class="btn btn-primary">
+
+                        搜尋
+
+                    </button>
+
+                </div>
+
+            </form>
         </h1>
 
         <!-- Job List -->
